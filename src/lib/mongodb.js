@@ -1,26 +1,43 @@
-import { MongoClient } from "mongodb";
+// lib/db.js
+import clientPromise from "./mongoClient";
 
-const uri = process.env.MONGODB_URI;
-if (!uri) {
-  throw new Error("Please add your MongoDB URI to .env.local");
-}
+/**
+ * Connect to the database and return the requested collection
+ * @param {string} collectionName - Name of the MongoDB collection
+ * @returns {Promise<Collection>} - MongoDB collection instance
+ */
+export const getCollection = async (collectionName) => {
+  const client = await clientPromise;
+  const dbName = "Xplore"; // Replace with your actual database name
+  console.log(`Connecting to database: ${dbName}, collection: ${collectionName}`);
+  const db = client.db(dbName);
+  return db.collection(collectionName);
+};
 
-const options = {};
+/**
+ * Find a single document in a collection
+ * @param {string} collectionName - Name of the MongoDB collection
+ * @param {object} query - MongoDB query
+ * @returns {Promise<object|null>} - Single document or null if not found
+ */
+export const findOne = async (collectionName, query) => {
+  console.log(`Finding one document in ${collectionName} with query:`, query);
+  const collection = await getCollection(collectionName);
+  const result = await collection.findOne(query);
+  console.log(`Found document:`, result);
+  return result;
+};
 
-let client;
-let clientPromise;
-
-if (process.env.NODE_ENV === "development") {
-  // Use a global variable to ensure the client is reused during development
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // In production, use a single instance of MongoClient
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
-}
-
-export default clientPromise;
+/**
+ * Find multiple documents in a collection
+ * @param {string} collectionName - Name of the MongoDB collection
+ * @param {object} query - MongoDB query
+ * @returns {Promise<object[]>} - Array of documents
+ */
+export const findMany = async (collectionName, query = {}) => {
+  console.log(`Finding documents in ${collectionName} with query:`, query);
+  const collection = await getCollection(collectionName);
+  const results = await collection.find(query).toArray();
+  console.log(`Found documents:`, results);
+  return results;
+};

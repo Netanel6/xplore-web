@@ -1,42 +1,52 @@
+// pages/login.js
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, Alert } from "@mui/material";
-import { useRouter } from "next/router"; // Import useRouter
+import { useRouter } from "next/router";
 
 const LoginScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const router = useRouter(); // Use useRouter from Next.js
+  const router = useRouter();
 
   const handleLogin = async () => {
     setError("");
     setSuccessMessage("");
-
+  
     if (!phoneNumber) {
       setError("Please enter a valid phone number.");
       return;
     }
-
+  
     try {
-      const response = await fetch(`/api/users?phoneNumber=${phoneNumber}`, {
+      // Make the API call with the phone number query
+      const response = await fetch(`http://localhost:8080/users?phoneNumber=${phoneNumber}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-
+  
       if (response.ok) {
-        const user = await response.json();
-        setSuccessMessage(`Welcome, ${user.name}!`);
-        setTimeout(() => router.push("/dashboard"), 2000); // Navigate to dashboard after 2 seconds
+        const result = await response.json(); // Parse the API response
+        console.log("API Response:", result); // Debug log to inspect the response
+  
+        if (result.status === "success" && result.data) {
+          const user = result.data; // Extract the user data
+          setSuccessMessage(`Welcome, ${user.name}!`);
+          setTimeout(() => router.push("/dashboard"), 2000); // Navigate to dashboard after 2 seconds
+        } else {
+          setError(result.message || "User not found. Please check your phone number.");
+        }
       } else {
-        setError("User not found. Please check your phone number.");
+        setError("Failed to fetch user. Please try again later.");
       }
     } catch (err) {
       console.error("Error during login:", err);
       setError("An error occurred. Please try again later.");
     }
   };
+  
 
   return (
     <Box
