@@ -1,18 +1,26 @@
-// components/MainContainer.js
 import React from "react";
-import { Box, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Button,
+} from "@mui/material";
 import { useRouter } from "next/router";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const MainContainer = ({ children }) => {
+const MainContainer = ({ children, onAddUser }) => {
   const router = useRouter();
 
   const menuItems = [
-    { name: "Dashboard", path: "/" },
-    { name: "Add User", path: "/add-user" }, // Placeholder for future feature
+    { name: "דשבורד", path: "/dashboard" },
+    // Add more menu items here if needed
   ];
 
   return (
-    <Box display="flex" height="100vh" bgcolor="#f4f4f4">
+    <Box display="flex" minHeight="100vh" bgcolor="#f4f4f4">
       {/* Sidebar Menu */}
       <Box
         width="250px"
@@ -22,9 +30,10 @@ const MainContainer = ({ children }) => {
         flexDirection="column"
         alignItems="center"
         py={4}
+        boxShadow="2px 0px 5px rgba(0,0,0,0.1)"
       >
         <Typography variant="h5" gutterBottom>
-          Menu
+          תפריט
         </Typography>
         <Divider sx={{ width: "80%", bgcolor: "#fff", my: 2 }} />
         <List>
@@ -42,6 +51,15 @@ const MainContainer = ({ children }) => {
             </ListItem>
           ))}
         </List>
+        <Divider sx={{ width: "80%", bgcolor: "#fff", my: 2 }} />
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddCircleOutlineIcon />}
+          onClick={onAddUser}
+        >
+          הוסף משתמש
+        </Button>
       </Box>
 
       {/* Main Content */}
