@@ -84,6 +84,7 @@ const Dashboard = ({ users }) => {
           p={2}
           boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
           overflow="auto"
+          sx={{ direction: "rtl" }}
         >
           <Typography variant="h6" sx={{ mb: 2, fontWeight: "medium" }}>
             רשימת משתמשים
@@ -99,11 +100,9 @@ const Dashboard = ({ users }) => {
                   p: 1,
                   borderRadius: "8px",
                   "&:hover": { backgroundColor: "#e0e0e0" },
+                  textAlign: "right",
                 }}
               >
-                <Avatar sx={{ mr: 2 }}>
-                  <PersonIcon />
-                </Avatar>
                 <ListItemText
                   primary={
                     <Typography variant="body1" sx={{ fontWeight: "bold" }}>
@@ -112,6 +111,9 @@ const Dashboard = ({ users }) => {
                   }
                   secondary={`מס׳ טלפון: ${user.phone_number}`}
                 />
+                <Avatar sx={{ ml: 2 }}>
+                  <PersonIcon />
+                </Avatar>
               </ListItem>
             ))}
           </List>
@@ -124,6 +126,7 @@ const Dashboard = ({ users }) => {
           ml={2}
           bgcolor="#ffffff"
           boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
+          sx={{ direction: "rtl" }}
         >
           {selectedUser ? (
             <Box>
@@ -144,7 +147,14 @@ const Dashboard = ({ users }) => {
                 <List sx={{ mt: 1 }}>
                   {selectedUser.quiz_list.map((quiz) => (
                     <ListItem key={quiz.id} sx={{ padding: 0 }}>
-                      <ListItemText primary={quiz.title} />
+                      <ListItemText
+                        primary={
+                          <Box display="flex" alignItems="center">
+                            {quiz.title}
+                            <QuizIcon sx={{ ml: 1 }} />
+                          </Box>
+                        }
+                      />
                     </ListItem>
                   ))}
                 </List>
@@ -163,7 +173,11 @@ const Dashboard = ({ users }) => {
       </Box>
 
       {/* Add User Dialog */}
-      <Dialog open={addUserDialogOpen} onClose={() => setAddUserDialogOpen(false)}>
+      <Dialog
+        open={addUserDialogOpen}
+        onClose={() => setAddUserDialogOpen(false)}
+        sx={{ direction: "rtl" }}
+      >
         <DialogTitle>הוסף משתמש</DialogTitle>
         <DialogContent>
           {error && (
