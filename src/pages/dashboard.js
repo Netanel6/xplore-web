@@ -151,7 +151,7 @@ const Dashboard = ({ users }) => {
                         primary={
                           <Box display="flex" alignItems="center">
                             {quiz.title}
-                            <QuizIcon sx={{ ml: 1 }} />
+                            {/* <QuizIcon sx={{ ml: 1 }} /> */}
                           </Box>
                         }
                       />
