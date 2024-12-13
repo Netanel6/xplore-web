@@ -33,7 +33,7 @@ const LoginScreen = () => {
   
         if (result.status === "success" && result.data) {
           const user = result.data; // Extract the user data
-          setSuccessMessage(`Welcome, ${user.name}!`);
+          setSuccessMessage(`ברוכים הבאים, ${user.name}!`);
           setTimeout(() => router.push("/dashboard"), 2000); // Navigate to dashboard after 2 seconds
         } else {
           setError(result.message || "User not found. Please check your phone number.");
@@ -58,12 +58,12 @@ const LoginScreen = () => {
       bgcolor="#f9f9f9"
     >
       <Typography variant="h4" component="h1" gutterBottom>
-        Login
+        Xplore ברוכים הבאים
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
       {successMessage && <Alert severity="success">{successMessage}</Alert>}
       <TextField
-        label="Phone Number"
+        label="מס׳ טלפון"
         variant="outlined"
         value={phoneNumber}
         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -76,7 +76,7 @@ const LoginScreen = () => {
         onClick={handleLogin}
         sx={{ marginTop: 2, maxWidth: "400px", width: "100%" }}
       >
-        Login
+        התחברות
       </Button>
     </Box>
   );
