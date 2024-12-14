@@ -20,7 +20,7 @@ const LoginScreen = () => {
   
     try {
       // Make the API call with the phone number query
-      const response = await fetch(`http://localhost:8080/users?phoneNumber=${phoneNumber}`, {
+      const response = await fetch(`http://localhost:8080/users/${phoneNumber}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
