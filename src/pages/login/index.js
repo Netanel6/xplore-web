@@ -12,12 +12,12 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     setError("");
     setSuccessMessage("");
-  
+
     if (!phoneNumber) {
       setError("Please enter a valid phone number.");
       return;
     }
-  
+
     try {
       // Make the API call with the phone number query
       const response = await fetch(`http://localhost:8080/users/${phoneNumber}`, {
@@ -26,13 +26,17 @@ const LoginScreen = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       if (response.ok) {
         const result = await response.json(); // Parse the API response
         console.log("API Response:", result); // Debug log to inspect the response
-  
+
         if (result.status === "success" && result.data) {
           const user = result.data; // Extract the user data
+          if (user.token) {
+            localStorage.setItem("authToken", user.token); // Save the token in localStorage
+          }
+
           setSuccessMessage(`ברוכים הבאים, ${user.name}!`);
           setTimeout(() => router.push("/dashboard"), 2000); // Navigate to dashboard after 2 seconds
         } else {
@@ -46,7 +50,6 @@ const LoginScreen = () => {
       setError("An error occurred. Please try again later.");
     }
   };
-  
 
   return (
     <Box

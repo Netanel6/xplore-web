@@ -7,7 +7,6 @@ import {
   ListItemText,
   Avatar,
   Button,
-  Divider,
   Dialog,
   DialogTitle,
   DialogActions,
@@ -16,25 +15,54 @@ import {
   Alert,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import MainContainer from "../../components/mainContainer";
+import MainContainer from "../../../components/mainContainer";
 
-const Dashboard = ({ users }) => {
-  const [hydrated, setHydrated] = useState(false);
+const Dashboard = () => {
+  const [userList, setUserList] = useState([]);
   const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
   const [newUserName, setNewUserName] = useState("");
   const [newUserPhoneNumber, setNewUserPhoneNumber] = useState("");
-  const [userList, setUserList] = useState(users || []);
   const [selectedUser, setSelectedUser] = useState(null);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Helper function to get the token
+  const getToken = () => {
+    return localStorage.getItem("authToken") || ""; // Replace with your token retrieval logic
+  };
+
+  // Fetch users dynamically on page load
   useEffect(() => {
-    setHydrated(true);
-  }, []);
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      setError("");
 
-  if (!hydrated) {
-    return null; // Prevent UI mismatch
-  }
+      try {
+        const response = await fetch("http://localhost:8080/users/all", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`, // Add token to the header
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setUserList(result.data || []);
+        } else {
+          console.error("Failed to fetch users.");
+          setError("שגיאה בטעינת משתמשים.");
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setError("שגיאה בטעינת משתמשים.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleAddUser = async () => {
     if (!newUserName || !newUserPhoneNumber) {
@@ -46,7 +74,10 @@ const Dashboard = ({ users }) => {
     try {
       const response = await fetch("http://localhost:8080/users", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`, // Add token to the header
+        },
         body: JSON.stringify(newUser),
       });
 
@@ -66,6 +97,20 @@ const Dashboard = ({ users }) => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+        bgcolor="#f9f9f9"
+      >
+        <Typography variant="h5">טוען משתמשים...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <MainContainer onAddUser={() => setAddUserDialogOpen(true)}>
       <Typography
@@ -77,7 +122,6 @@ const Dashboard = ({ users }) => {
         דשבורד
       </Typography>
       <Box display="flex" height="100%" overflow="hidden">
-        {/* Scrollable User List Container */}
         <Box
           width="30%"
           bgcolor="#f5f5f5"
@@ -118,8 +162,6 @@ const Dashboard = ({ users }) => {
             ))}
           </List>
         </Box>
-
-        {/* Main Content */}
         <Box
           flex={1}
           p={3}
@@ -147,14 +189,7 @@ const Dashboard = ({ users }) => {
                 <List sx={{ mt: 1 }}>
                   {selectedUser.quiz_list.map((quiz) => (
                     <ListItem key={quiz.id} sx={{ padding: 0 }}>
-                      <ListItemText
-                        primary={
-                          <Box display="flex" alignItems="center">
-                            {quiz.title}
-                            {/* <QuizIcon sx={{ ml: 1 }} /> */}
-                          </Box>
-                        }
-                      />
+                      <ListItemText primary={quiz.title} />
                     </ListItem>
                   ))}
                 </List>
@@ -171,8 +206,6 @@ const Dashboard = ({ users }) => {
           )}
         </Box>
       </Box>
-
-      {/* Add User Dialog */}
       <Dialog
         open={addUserDialogOpen}
         onClose={() => setAddUserDialogOpen(false)}
@@ -212,27 +245,5 @@ const Dashboard = ({ users }) => {
     </MainContainer>
   );
 };
-
-export async function getServerSideProps() {
-  try {
-    const response = await fetch("http://localhost:8080/users/all");
-    const result = await response.json();
-
-    const users = Array.isArray(result.data) ? result.data : [];
-
-    return {
-      props: {
-        users,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return {
-      props: {
-        users: [],
-      },
-    };
-  }
-}
 
 export default Dashboard;
