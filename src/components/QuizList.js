@@ -7,8 +7,8 @@ import {
   ListItemText,
   CircularProgress,
 } from "@mui/material";
-import { useQuizContext } from "../../context/quizContext";
-import QuizDetailsDialog from "../../components/QuizDetailsDialog";
+import { useQuizContext } from "../context/quizContext";
+import QuizDetailsDialog from "../components/QuizDetailsDialog";
 
 const QuizList = () => {
   const { quizList, isLoading, fetchQuizList } = useQuizContext();

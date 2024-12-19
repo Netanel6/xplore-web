@@ -9,6 +9,7 @@ export const addUser = async (user) => apiClient("/users", {
 
 export const assignQuizToUser = async (userId, quiz) =>
   apiClient(`/users/${userId}/quizzes`, {
-    method: "POST",
+    method: "PATCH",
     body: JSON.stringify(quiz),
   });
+

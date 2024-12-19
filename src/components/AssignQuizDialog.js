@@ -1,42 +1,91 @@
-import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Alert } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+  Alert,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 import { assignQuizToUser } from "../services/userService";
-import { useUserContext } from "../context/userContext";
+import { useUserContext } from "../context/u serContext";
+import { useQuizContext } from "../context/quizContext";
 
 const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
-  const [newQuizTitle, setNewQuizTitle] = useState("");
-  const [error, setError] = useState("");
   const { fetchUserList } = useUserContext();
+  const { quizList, fetchQuizList, isLoading } = useQuizContext();
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (open) {
+      fetchQuizList();
+    }
+  }, [open, fetchQuizList]);
 
   const handleAssignQuiz = async () => {
-    if (!newQuizTitle) {
-      setError("נא למלא את שם השאלון.");
+    if (!selectedQuiz) {
+      setError("נא לבחור שאלון.");
       return;
     }
 
     try {
-      await assignQuizToUser(selectedUser._id, { title: newQuizTitle });
+      await assignQuizToUser(selectedUser.id, {
+        id: selectedQuiz._id,
+        title: selectedQuiz.title,
+      });
       fetchUserList();
       onClose();
-      setNewQuizTitle("");
+      setSelectedQuiz(null);
       setError("");
     } catch (err) {
       setError("לא ניתן להוסיף שאלון.");
     }
   };
 
+  if (isLoading) {
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogTitle>הוסף שאלון למשתמש</DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+            <CircularProgress />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>הוסף שאלון למשתמש</DialogTitle>
       <DialogContent>
-        {error && <Alert severity="error">{error}</Alert>}
-        <TextField
-          label="שם השאלון"
-          value={newQuizTitle}
-          onChange={(e) => setNewQuizTitle(e.target.value)}
-          fullWidth
-          margin="dense"
-        />
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        <List>
+          {quizList.map((quiz) => (
+            <ListItem
+              key={quiz._id}
+              button
+              onClick={() => setSelectedQuiz(quiz)}
+              sx={{
+                mb: 1,
+                borderRadius: "8px",
+                backgroundColor: selectedQuiz?._id === quiz._id ? "#e0f7fa" : "inherit",
+                "&:hover": { backgroundColor: "#f1f1f1" },
+              }}
+            >
+              <ListItemText
+                primary={quiz.title}
+                secondary={quiz.description}
+              />
+            </ListItem>
+          ))}
+        </List>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
