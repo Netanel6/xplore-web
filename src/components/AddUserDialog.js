@@ -23,8 +23,20 @@ const AddUserDialog = ({ open, onClose }) => {
       return;
     }
 
+    // Generate a unique ID for the user
+    const newUserId = `${newUserPhoneNumber}-${Date.now()}`;
+
     try {
-      await addUser({ name: newUserName, phone_number: newUserPhoneNumber });
+      // Add the user with the generated ID
+      await addUser({
+        name: newUserName,
+        phone_number: newUserPhoneNumber,
+        id: newUserId, // Attach the generated ID
+      });
+
+      // Save the ID to local storage for future reference
+      localStorage.setItem("userId", newUserId);
+
       fetchUserList(); // Refresh the user list
       onClose();
       setNewUserName("");

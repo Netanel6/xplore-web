@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 
-const MainContainer = ({ onAddUser, children }) => {
+const MainContainer = ({ children }) => {
   return (
     <Box
       display="flex"
@@ -19,9 +19,6 @@ const MainContainer = ({ onAddUser, children }) => {
         p={2}
       >
         <Typography variant="h5">ניהול מערכת</Typography>
-        <Button variant="contained" color="primary" onClick={onAddUser}>
-          הוסף משתמש
-        </Button>
       </Box>
       <Box flex={1} overflow="auto" p={2}>
         {children}
