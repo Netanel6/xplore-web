@@ -13,7 +13,7 @@ import {
   Box,
 } from "@mui/material";
 import { assignQuizToUser } from "../services/userService";
-import { useUserContext } from "../context/u serContext";
+import { useUserContext } from "../context/userContext";
 import { useQuizContext } from "../context/quizContext";
 
 const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
