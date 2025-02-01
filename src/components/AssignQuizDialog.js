@@ -22,12 +22,15 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [error, setError] = useState("");
 
+  // Fetch quizzes when the dialog opens
   useEffect(() => {
     if (open) {
+      console.log("Fetching quiz list...");
       fetchQuizList();
     }
   }, [open, fetchQuizList]);
 
+  // Assign quiz to the user
   const handleAssignQuiz = async () => {
     if (!selectedQuiz) {
       setError("נא לבחור שאלון.");
@@ -35,15 +38,24 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
     }
 
     try {
-      await assignQuizToUser(selectedUser.id, {
+      const payload = {
         id: selectedQuiz._id,
         title: selectedQuiz.title,
-      });
+      };
+
+      console.log("Sending payload:", payload);
+
+      await assignQuizToUser(selectedUser.id, payload);
+
+      console.log("Quiz assigned successfully.");
+
+      // Refresh user list and close the dialog
       fetchUserList();
       onClose();
       setSelectedQuiz(null);
       setError("");
     } catch (err) {
+      console.error("Error assigning quiz:", err.response?.data || err.message);
       setError("לא ניתן להוסיף שאלון.");
     }
   };
@@ -67,36 +79,37 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
       <DialogContent>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <List>
-          {quizList.map((quiz) => (
-            <ListItem
-              key={quiz._id}
-              button
-              onClick={() => setSelectedQuiz(quiz)}
-              sx={{
-                mb: 1,
-                borderRadius: "8px",
-                backgroundColor: selectedQuiz?._id === quiz._id ? "#e0f7fa" : "inherit",
-                "&:hover": { backgroundColor: "#f1f1f1" },
-              }}
-            >
-              <ListItemText
-                primary={quiz.title}
-                secondary={quiz.description}
-              />
-            </ListItem>
-          ))}
+          {quizList.length > 0 ? (
+            quizList.map((quiz) => (
+              <ListItem
+                key={quiz._id}
+                button
+                onClick={() => setSelectedQuiz(quiz)}
+                sx={{
+                  mb: 1,
+                  borderRadius: "8px",
+                  backgroundColor: selectedQuiz?._id === quiz._id ? "#e0f7fa" : "inherit",
+                  "&:hover": { backgroundColor: "#f1f1f1" },
+                }}
+              >
+                <ListItemText primary={quiz.title} secondary={quiz.description} />
+              </ListItem>
+            ))
+          ) : (
+            <ListItemText primary="לא נמצאו שאלונים זמינים" sx={{ textAlign: "center", mt: 2 }} />
+          )}
         </List>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
           ביטול
         </Button>
-        <Button onClick={handleAssignQuiz} color="primary">
+        <Button onClick={handleAssignQuiz} color="primary" disabled={!selectedQuiz}>
           שמור
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
+}; 
 
 export default AssignQuizDialog;
