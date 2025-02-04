@@ -7,8 +7,11 @@ import {
   ListItem,
   ListItemText,
   Button,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AssignQuizDialog from "./AssignQuizDialog";
+import { deleteQuizForUser } from "../services/userService";
 
 const UserDetails = ({ user }) => {
   const [assignQuizDialogOpen, setAssignQuizDialogOpen] = useState(false);
@@ -22,6 +25,15 @@ const UserDetails = ({ user }) => {
       </Paper>
     );
   }
+
+  const handleDeleteQuiz = async (quizId) => {
+    try {
+      await deleteQuizForUser(user.id, quizId);
+      alert("השאלון הוסר בהצלחה!");
+    } catch (error) {
+      console.error("Error deleting quiz:", error);
+    }
+  };
 
   return (
     <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff" }}>
@@ -41,7 +53,11 @@ const UserDetails = ({ user }) => {
       {user.quiz_list?.length > 0 ? (
         <List>
           {user.quiz_list.map((quiz) => (
-            <ListItem key={quiz.id}>
+            <ListItem key={quiz.id} secondaryAction={
+              <IconButton edge="end" color="error" onClick={() => handleDeleteQuiz(quiz.id)}>
+                <DeleteIcon />
+              </IconButton>
+            }>
               <ListItemText primary={quiz.title} />
             </ListItem>
           ))}
@@ -58,11 +74,7 @@ const UserDetails = ({ user }) => {
       >
         הוסף שאלון
       </Button>
-      <AssignQuizDialog
-        open={assignQuizDialogOpen}
-        onClose={() => setAssignQuizDialogOpen(false)}
-        selectedUser={user}
-      />
+      <AssignQuizDialog open={assignQuizDialogOpen} onClose={() => setAssignQuizDialogOpen(false)} selectedUser={user} />
     </Paper>
   );
 };
