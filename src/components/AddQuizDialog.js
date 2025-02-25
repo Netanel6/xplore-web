@@ -71,7 +71,7 @@ const AddQuizDialog = ({ open, onClose }) => {
       onClose();
       resetFields();
     } catch {
-      setError("שגיאה ביצירת שאלון.");
+      setError("שגיאה ביצירת חידון.");
     }
   };
 
@@ -124,7 +124,7 @@ const AddQuizDialog = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>הוסף שאלון חדש</DialogTitle>
+      <DialogTitle>הוסף חידון חדש</DialogTitle>
       <DialogContent>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <TextField
@@ -203,7 +203,7 @@ const AddQuizDialog = ({ open, onClose }) => {
           margin="dense"
         />
         <Box display="flex" alignItems="center" mt={2} mb={2}>
-          <Typography>שאלון פעיל</Typography>
+          <Typography>חידון פעיל</Typography>
           <Switch checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
         </Box>
         <Box>
