@@ -29,7 +29,7 @@ const UserDetails = ({ user }) => {
   const handleDeleteQuiz = async (quizId) => {
     try {
       await deleteQuizForUser(user.id, quizId);
-      alert("השאלון הוסר בהצלחה!");
+      alert("החידון הוסר בהצלחה!");
     } catch (error) {
       console.error("Error deleting quiz:", error);
     }
@@ -72,7 +72,7 @@ const UserDetails = ({ user }) => {
         sx={{ mt: 3 }}
         onClick={() => setAssignQuizDialogOpen(true)}
       >
-        הוסף שאלון
+        הוסף חידון
       </Button>
       <AssignQuizDialog open={assignQuizDialogOpen} onClose={() => setAssignQuizDialogOpen(false)} selectedUser={user} />
     </Paper>

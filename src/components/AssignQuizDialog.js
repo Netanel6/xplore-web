@@ -33,7 +33,7 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
   // Assign quiz to the user
   const handleAssignQuiz = async () => {
     if (!selectedQuiz) {
-      setError("נא לבחור שאלון.");
+      setError("נא לבחור חידון.");
       return;
     }
 
@@ -56,14 +56,14 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
       setError("");
     } catch (err) {
       console.error("Error assigning quiz:", err.response?.data || err.message);
-      setError("לא ניתן להוסיף שאלון.");
+      setError("לא ניתן להוסיף חידון.");
     }
   };
 
   if (isLoading) {
     return (
       <Dialog open={open} onClose={onClose}>
-        <DialogTitle>הוסף שאלון למשתמש</DialogTitle>
+        <DialogTitle>הוסף חידון למשתמש</DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="center" alignItems="center" height="200px">
             <CircularProgress />
@@ -75,7 +75,7 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>הוסף שאלון למשתמש</DialogTitle>
+      <DialogTitle>הוסף חידון למשתמש</DialogTitle>
       <DialogContent>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <List>
@@ -110,6 +110,6 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
       </DialogActions>
     </Dialog>
   );
-}; 
+};
 
 export default AssignQuizDialog;
