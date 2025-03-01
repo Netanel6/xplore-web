@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Grid, Paper, Button } from "@mui/material";
+import { Box, Typography, Grid, Paper, Button, CircularProgress } from "@mui/material";
 import MainContainer from "../../../components/mainContainer";
 import UserList from "../../components/UserList";
 import UserDetails from "../../components/UserDetails";
@@ -7,9 +7,12 @@ import AddUserDialog from "../../components/AddUserDialog";
 import EditUserDialog from "../../components/EditUserDialog";
 import AddQuizDialog from "../../components/AddQuizDialog";
 import { useUserContext } from "../../context/userContext";
+import { useQuizContext } from "../../context/quizContext";
 
 const Dashboard = () => {
   const { userList, fetchUserList, isLoading: userLoading } = useUserContext();
+  const { quizList, fetchQuizList, isLoading: quizLoading } = useQuizContext();
+
   const [selectedUser, setSelectedUser] = useState(null);
   const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
   const [editUserDialogOpen, setEditUserDialogOpen] = useState(false);
@@ -18,7 +21,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchUserList();
-  }, []);
+    fetchQuizList();
+  }, [fetchUserList, fetchQuizList]);
 
   if (userLoading) {
     return (
@@ -72,9 +76,28 @@ const Dashboard = () => {
               color="secondary"
               onClick={() => setAddQuizDialogOpen(true)}
               fullWidth
+              sx={{ mb: 2 }}
             >
               הוסף חידון חדש
             </Button>
+
+            {/* ✅ Display Quiz List Inside Dashboard */}
+            {quizLoading ? (
+              <Box display="flex" justifyContent="center" alignItems="center" height="100px">
+                <CircularProgress />
+              </Box>
+            ) : quizList.length > 0 ? (
+              <Box>
+                {quizList.map((quiz) => (
+                  <Paper key={quiz._id} elevation={2} sx={{ p: 2, mb: 2 }}>
+                    <Typography variant="subtitle1">{quiz.title}</Typography>
+                    <Typography variant="body2">שאלות: {quiz.questions.length}</Typography>
+                  </Paper>
+                ))}
+              </Box>
+            ) : (
+              <Typography>אין חידונים זמינים.</Typography>
+            )}
           </Paper>
         </Grid>
       </Grid>
