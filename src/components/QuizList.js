@@ -21,11 +21,13 @@ const QuizList = () => {
     setDialogOpen(true);
   };
 
-  if (isLoading) {
+  if (quizLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress />
-      </Box>
+      <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff" }}>
+        <Typography variant="body1" color="textSecondary">
+          טוען שאלונים...
+        </Typography>
+      </Paper>
     );
   }
 

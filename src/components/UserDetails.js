@@ -12,8 +12,10 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignQuizDialog from "./AssignQuizDialog";
 import { deleteQuizForUser } from "../services/userService";
+import { useQuizContext } from "../context/quizContext";
 
 const UserDetails = ({ user }) => {
+  const { quizList } = useQuizContext();
   const [assignQuizDialogOpen, setAssignQuizDialogOpen] = useState(false);
 
   if (!user) {
@@ -25,6 +27,10 @@ const UserDetails = ({ user }) => {
       </Paper>
     );
   }
+
+  const assignedQuizzes = quizList.filter((quiz) => 
+    user.quiz_list?.some((id) => id === quiz._id) // ✅ Ensure correct ID matching
+  );
 
   const handleDeleteQuiz = async (quizId) => {
     try {
@@ -50,14 +56,17 @@ const UserDetails = ({ user }) => {
       <Typography variant="h6" sx={{ mb: 2 }}>
         שאלונים משויכים
       </Typography>
-      {user.quiz_list?.length > 0 ? (
+      {assignedQuizzes.length > 0 ? (
         <List>
-          {user.quiz_list.map((quiz) => (
-            <ListItem key={quiz.id} secondaryAction={
-              <IconButton edge="end" color="error" onClick={() => handleDeleteQuiz(quiz.id)}>
-                <DeleteIcon />
-              </IconButton>
-            }>
+          {assignedQuizzes.map((quiz) => (
+            <ListItem
+              key={quiz._id}
+              secondaryAction={
+                <IconButton edge="end" color="error" onClick={() => handleDeleteQuiz(quiz._id)}>
+                  <DeleteIcon />
+                </IconButton>
+              }
+            >
               <ListItemText primary={quiz.title} />
             </ListItem>
           ))}
