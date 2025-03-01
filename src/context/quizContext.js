@@ -8,23 +8,28 @@ export const QuizProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchQuizList = useCallback(async () => {
+    console.log("🔄 Fetching quizzes...");
     setIsLoading(true);
     try {
       const quizzes = await fetchQuizzes();
+      console.log("✅ Quizzes fetched successfully:", quizzes);
       setQuizList(quizzes);
     } catch (error) {
-      console.error("Error fetching quizzes:", error);
+      console.error("❌ Error fetching quizzes:", error);
     } finally {
+      console.log("📢 Quiz fetching complete.");
       setIsLoading(false);
     }
   }, []);
 
   const addQuiz = async (quiz) => {
+    console.log("➕ Adding new quiz:", quiz);
     try {
       const newQuiz = await createQuiz(quiz);
+      console.log("✅ Quiz created:", newQuiz);
       setQuizList((prev) => [...prev, newQuiz]);
     } catch (error) {
-      console.error("Error creating quiz:", error);
+      console.error("❌ Error creating quiz:", error);
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -6,18 +6,15 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
+  Switch,
 } from "@mui/material";
 import { useQuizContext } from "../context/quizContext";
 import QuizDetailsDialog from "../components/QuizDetailsDialog";
 
 const QuizList = () => {
-  const { quizList, isLoading, fetchQuizList } = useQuizContext();
+  const { quizList, isLoading } = useQuizContext(); // ✅ Use only injected data
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  useEffect(() => {
-    fetchQuizList();
-  }, [fetchQuizList]);
 
   const handleQuizClick = (quiz) => {
     setSelectedQuiz(quiz);
@@ -35,7 +32,7 @@ const QuizList = () => {
   return (
     <Box p={3}>
       <Typography variant="h4" mb={3}>
-        רשימת שאלונים
+        רשימת חידונים
       </Typography>
       {quizList.length > 0 ? (
         <List>
@@ -51,11 +48,16 @@ const QuizList = () => {
               }}
             >
               <ListItemText primary={quiz.title} secondary={quiz.description} />
+              {/* ✅ Timer Toggle */}
+              <Switch
+                checked={quiz.quizTimer > 0}
+                onChange={() => console.log(`Quiz Timer: ${quiz.quizTimer > 0 ? "Enabled" : "Disabled"}`)}
+              />
             </ListItem>
           ))}
         </List>
       ) : (
-        <Typography>אין שאלונים זמינים.</Typography>
+        <Typography>אין חידונים זמינים.</Typography>
       )}
       <QuizDetailsDialog
         open={dialogOpen}
