@@ -39,8 +39,7 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
 
     try {
       const payload = {
-        id: selectedQuiz._id,
-        title: selectedQuiz.title,
+        id: selectedQuiz._id
       };
 
       console.log("Sending payload:", payload);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Paper,
   Typography,
@@ -17,6 +17,35 @@ import { useQuizContext } from "../context/quizContext";
 const UserDetails = ({ user }) => {
   const { quizList } = useQuizContext();
   const [assignQuizDialogOpen, setAssignQuizDialogOpen] = useState(false);
+  const [assignedQuizzes, setAssignedQuizzes] = useState([]);
+
+  useEffect(() => {
+    if (!user || !quizList.length) return;
+
+    console.log("📌 User Quiz List:", user.quiz_list);
+    console.log("📌 Available Quizzes:", quizList);
+
+    // Extract only quiz IDs from user.quiz_list
+    const userQuizIds = user.quiz_list?.map((quiz) => (typeof quiz === "string" ? quiz : quiz.id)) || [];
+
+    // Find full quiz objects that match the user's quiz IDs
+    const filteredQuizzes = quizList.filter((quiz) => userQuizIds.includes(quiz._id));
+
+    console.log("📌 Assigned Quizzes:", filteredQuizzes);
+    setAssignedQuizzes(filteredQuizzes);
+  }, [user, quizList]);
+
+  const handleDeleteQuiz = async (quizId) => {
+    try {
+      await deleteQuizForUser(user.id, quizId);
+      alert("החידון הוסר בהצלחה!");
+
+      // Remove quiz from UI immediately
+      setAssignedQuizzes((prev) => prev.filter((quiz) => quiz._id !== quizId));
+    } catch (error) {
+      console.error("❌ Error deleting quiz:", error);
+    }
+  };
 
   if (!user) {
     return (
@@ -27,19 +56,6 @@ const UserDetails = ({ user }) => {
       </Paper>
     );
   }
-
-  const assignedQuizzes = quizList.filter((quiz) => 
-    user.quiz_list?.some((id) => id === quiz._id) // ✅ Ensure correct ID matching
-  );
-
-  const handleDeleteQuiz = async (quizId) => {
-    try {
-      await deleteQuizForUser(user.id, quizId);
-      alert("החידון הוסר בהצלחה!");
-    } catch (error) {
-      console.error("Error deleting quiz:", error);
-    }
-  };
 
   return (
     <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff" }}>
