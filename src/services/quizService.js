@@ -1,9 +1,9 @@
 import apiClient from "../utils/apiClient";
 
 export const fetchQuizzes = async () => {
-  console.log("🔍 Calling API: /quizzes/all");
+  console.log("🔍 Calling API: /all");
   try {
-    const response = await apiClient("/quizzes/all");
+    const response = await apiClient("/all");
     console.log("✅ API Response:", response);
     
     if (!response || !response.data) {
@@ -21,7 +21,7 @@ export const fetchQuizzes = async () => {
 export const createQuiz = async (quiz) => {
   console.log("📤 Sending new quiz data:", quiz);
   try {
-    const response = await apiClient("/quizzes", {
+    const response = await apiClient("/quiz", {
       method: "POST",
       body: JSON.stringify(quiz),
     });
