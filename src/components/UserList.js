@@ -6,6 +6,7 @@ import {
     Avatar,
     IconButton,
     Typography,
+    Box
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
@@ -33,8 +34,10 @@ const UserList = ({ userList, setSelectedUser, setEditUserDialogOpen, setEditing
     };
 
     return (
-        <>
-            <Typography variant="h6" sx={{ mb: 2 }}>רשימת משתמשים</Typography>
+        <Box dir="rtl"> {/* ✅ Full RTL direction */}
+            <Typography variant="h6" sx={{ mb: 2, textAlign: "right" }}>
+                רשימת משתמשים
+            </Typography>
             <List>
                 {userList.map((user) => (
                     <ListItem
@@ -44,27 +47,37 @@ const UserList = ({ userList, setSelectedUser, setEditUserDialogOpen, setEditing
                         sx={{
                             mb: 1,
                             borderRadius: "8px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
                             "&:hover": { backgroundColor: "#e0e0e0" },
                         }}
-                        secondaryAction={
-                            <>
-                                <IconButton color="primary" onClick={() => handleEditUser(user)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton color="error" onClick={() => handleDeleteUser(user.id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </>
-                        }
                     >
-                        <Avatar sx={{ mr: 2, bgcolor: "#1976d2" }}>
+                        {/* ✅ Move Actions to the Left */}
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <IconButton color="primary" onClick={() => handleEditUser(user)}>
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton color="error" onClick={() => handleDeleteUser(user.id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
+
+                        {/* ✅ Text aligned properly */}
+                        <ListItemText 
+                            primary={user.name} 
+                            secondary={`מס׳ טלפון: ${user.phone_number}`} 
+                            sx={{ textAlign: "right" }} 
+                        />
+
+                        {/* ✅ Avatar Now Moves to the Right */}
+                        <Avatar sx={{ bgcolor: "#1976d2" }}>
                             <PersonIcon />
                         </Avatar>
-                        <ListItemText primary={user.name} secondary={`מס׳ טלפון: ${user.phone_number}`} />
                     </ListItem>
                 ))}
             </List>
-        </>
+        </Box>
     );
 };
 

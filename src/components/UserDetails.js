@@ -8,6 +8,7 @@ import {
   ListItemText,
   Button,
   IconButton,
+  Box
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignQuizDialog from "./AssignQuizDialog";
@@ -49,7 +50,7 @@ const UserDetails = ({ user }) => {
 
   if (!user) {
     return (
-      <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff" }}>
+      <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff", dir: "rtl", textAlign: "right" }}>
         <Typography variant="body1" color="textSecondary">
           בחר משתמש כדי לראות פרטים.
         </Typography>
@@ -58,7 +59,7 @@ const UserDetails = ({ user }) => {
   }
 
   return (
-    <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff" }}>
+    <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff", dir: "rtl", textAlign: "right" }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
         פרטי משתמש
       </Typography>
@@ -72,24 +73,33 @@ const UserDetails = ({ user }) => {
       <Typography variant="h6" sx={{ mb: 2 }}>
         שאלונים משויכים
       </Typography>
+
       {assignedQuizzes.length > 0 ? (
         <List>
           {assignedQuizzes.map((quiz) => (
             <ListItem
               key={quiz._id}
-              secondaryAction={
-                <IconButton edge="end" color="error" onClick={() => handleDeleteQuiz(quiz._id)}>
-                  <DeleteIcon />
-                </IconButton>
-              }
+              sx={{
+                display: "flex",
+                justifyContent: "space-between", // ✅ Align text right, icon left
+                flexDirection: "row-reverse", // ✅ Ensures correct RTL order
+              }}
             >
-              <ListItemText primary={quiz.title} />
+              {/* ✅ Quiz Title */}
+              <ListItemText primary={quiz.title} sx={{ textAlign: "right" }} />
+              
+              {/* ❌ Delete Icon (Aligned Left) */}
+              <IconButton edge="start" color="error" onClick={() => handleDeleteQuiz(quiz._id)}>
+                <DeleteIcon />
+              </IconButton>
             </ListItem>
           ))}
         </List>
       ) : (
         <Typography color="textSecondary">אין שאלונים משויכים למשתמש זה.</Typography>
       )}
+
+      {/* ➕ Add Quiz Button */}
       <Button
         variant="contained"
         color="primary"
@@ -99,6 +109,8 @@ const UserDetails = ({ user }) => {
       >
         הוסף חידון
       </Button>
+
+      {/* 📜 Assign Quiz Dialog */}
       <AssignQuizDialog open={assignQuizDialogOpen} onClose={() => setAssignQuizDialogOpen(false)} selectedUser={user} />
     </Paper>
   );

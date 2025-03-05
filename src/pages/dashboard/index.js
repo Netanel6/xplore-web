@@ -8,6 +8,7 @@ import EditUserDialog from "../../components/EditUserDialog";
 import AddQuizDialog from "../../components/AddQuizDialog";
 import { useUserContext } from "../../context/userContext";
 import { useQuizContext } from "../../context/quizContext";
+import QuizList from "@/components/QuizList";
 
 const Dashboard = () => {
   const { userList, fetchUserList, isLoading: userLoading } = useUserContext();
@@ -88,12 +89,7 @@ const Dashboard = () => {
               </Box>
             ) : quizList.length > 0 ? (
               <Box>
-                {quizList.map((quiz) => (
-                  <Paper key={quiz._id} elevation={2} sx={{ p: 2, mb: 2 }}>
-                    <Typography variant="subtitle1">{quiz.title}</Typography>
-                    <Typography variant="body2">שאלות: {quiz.questions.length}</Typography>
-                  </Paper>
-                ))}
+             <QuizList quizList={quizList} fetchQuizList={fetchQuizList}></QuizList>
               </Box>
             ) : (
               <Typography>אין חידונים זמינים.</Typography>

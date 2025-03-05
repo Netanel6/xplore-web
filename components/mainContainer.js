@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const MainContainer = ({ children }) => {
   return (
@@ -9,6 +9,7 @@ const MainContainer = ({ children }) => {
       height="100vh"
       overflow="hidden"
       bgcolor="#f0f0f0"
+      dir="rtl"
     >
       <Box
         display="flex"
