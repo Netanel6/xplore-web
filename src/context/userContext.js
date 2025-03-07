@@ -8,13 +8,16 @@ export const UserProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchUserList = useCallback(async () => {
+    console.log("🔄 Fetching user list...");
     setIsLoading(true);
     try {
-      const data = await fetchUsers();
-      setUserList(data.data || []);
+      const users = await fetchUsers();
+      console.log("✅ Users fetched successfully:", users);
+      setUserList(users); // ✅ Ensure actual data is set
     } catch (error) {
-      console.error("Error fetching users:", error.message);
+      console.error("❌ Error fetching users:", error);
     } finally {
+      console.log("📢 User fetching complete.");
       setIsLoading(false);
     }
   }, []);
@@ -29,7 +32,7 @@ export const UserProvider = ({ children }) => {
 export const useUserContext = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUserContext must be used within a UserProvider");
+    throw new Error("❌ useUserContext must be used within a UserProvider");
   }
   return context;
 };

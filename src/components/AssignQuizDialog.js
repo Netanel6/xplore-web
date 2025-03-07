@@ -11,6 +11,7 @@ import {
   Alert,
   CircularProgress,
   Box,
+  Typography,
 } from "@mui/material";
 import { assignQuizToUser } from "../services/userService";
 import { useUserContext } from "../context/userContext";
@@ -40,7 +41,6 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
     try {
       const payload = {
         id: selectedQuiz._id,
-        title: selectedQuiz.title,
       };
 
       console.log("Sending payload:", payload);
@@ -62,8 +62,8 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
 
   if (isLoading) {
     return (
-      <Dialog open={open} onClose={onClose}>
-        <DialogTitle>הוסף חידון למשתמש</DialogTitle>
+      <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ textAlign: "right", dir: "rtl" }}>הוסף חידון למשתמש</DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="center" alignItems="center" height="200px">
             <CircularProgress />
@@ -75,8 +75,8 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>הוסף חידון למשתמש</DialogTitle>
-      <DialogContent>
+      <DialogTitle sx={{ textAlign: "right", dir: "rtl" }}>הוסף חידון למשתמש</DialogTitle>
+      <DialogContent sx={{ dir: "rtl", textAlign: "right" }}>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <List>
           {quizList.length > 0 ? (
@@ -88,23 +88,36 @@ const AssignQuizDialog = ({ open, onClose, selectedUser }) => {
                 sx={{
                   mb: 1,
                   borderRadius: "8px",
-                  backgroundColor: selectedQuiz?._id === quiz._id ? "#e0f7fa" : "inherit",
+                  backgroundColor: selectedQuiz?._id === quiz._id ? "#d1eaff" : "inherit",
                   "&:hover": { backgroundColor: "#f1f1f1" },
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
-                <ListItemText primary={quiz.title} secondary={quiz.description} />
+                <ListItemText
+                  primary={<Typography variant="body1" fontWeight="bold">{quiz.title}</Typography>}
+                  secondary={quiz.description}
+                  sx={{ textAlign: "right" }}
+                />
+                {selectedQuiz?._id === quiz._id && (
+                  <Typography variant="body2" color="primary" sx={{ fontWeight: "bold" }}>
+                    ✅ נבחר
+                  </Typography>
+                )}
               </ListItem>
             ))
           ) : (
-            <ListItemText primary="לא נמצאו שאלונים זמינים" sx={{ textAlign: "center", mt: 2 }} />
+            <Typography sx={{ textAlign: "center", mt: 2 }} color="textSecondary">
+              לא נמצאו חידונים זמינים
+            </Typography>
           )}
         </List>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ justifyContent: "space-between", dir: "rtl" }}>
         <Button onClick={onClose} color="secondary">
           ביטול
         </Button>
-        <Button onClick={handleAssignQuiz} color="primary" disabled={!selectedQuiz}>
+        <Button onClick={handleAssignQuiz} color="primary" variant="contained" disabled={!selectedQuiz}>
           שמור
         </Button>
       </DialogActions>
