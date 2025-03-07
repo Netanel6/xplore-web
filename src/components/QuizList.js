@@ -12,25 +12,26 @@ import {
 import { useQuizContext } from "../context/quizContext";
 import QuizDetailsDialog from "../components/QuizDetailsDialog";
 import EditQuizForm from "../components/EditQuizForm";
+import QuizListWithEdit from "../components/QuizListWithEdit";
 
 const QuizList = () => {
   const { quizList, isLoading, updateQuiz } = useQuizContext();
   const [selectedQuiz, setSelectedQuiz] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const handleQuizClick = (quiz) => {
     setSelectedQuiz(quiz);
-    setDialogOpen(true);
+    setDetailsDialogOpen(true); // Open details dialog
   };
 
-  const handleEditClick = () => {
-    setDialogOpen(false); // Close details dialog before opening edit
-    setTimeout(() => setEditDialogOpen(true), 300); // Smooth transition
+  const handleEditClick = (quiz) => {
+    setSelectedQuiz(quiz);
+    setEditDialogOpen(true);
   };
 
   const handleSaveQuiz = (updatedQuiz) => {
-    updateQuiz(updatedQuiz); // ✅ Update quiz in context/state
+    updateQuiz(updatedQuiz);
     setEditDialogOpen(false);
   };
 
@@ -45,79 +46,32 @@ const QuizList = () => {
   }
 
   return (
-    <Box p={3} dir="rtl"> {/* ✅ Ensures RTL alignment */}
+    <Box p={3} dir="rtl">
       <Typography variant="h5" mb={2} textAlign="right">
         רשימת חידונים
       </Typography>
 
       {quizList.length > 0 ? (
-        <List>
-          {quizList.map((quiz) => (
-            <ListItem
-              key={quiz._id}
-              button
-              onClick={() => handleQuizClick(quiz)}
-              sx={{
-                mb: 1,
-                borderRadius: "8px",
-                display: "flex",
-                justifyContent: "space-between", // ✅ Proper spacing
-                alignItems: "center",
-                "&:hover": { backgroundColor: "#f0f0f0" },
-              }}
-            >
-              {/* ✅ Toggle Button (Left Side) */}
-              <Switch
-                checked={quiz.quizTimer > 0}
-                onChange={() =>
-                  console.log(
-                    `Quiz Timer: ${quiz.quizTimer > 0 ? "Enabled" : "Disabled"}`
-                  )
-                }
-              />
-
-              {/* ✅ Text (Compact & Shortened) */}
-              <ListItemText
-                primary={quiz.title.length > 15 ? `${quiz.title.substring(0, 15)}...` : quiz.title}
-                secondary={
-                  quiz.description && quiz.description.length > 20
-                    ? `${quiz.description.substring(0, 20)}...`
-                    : quiz.description
-                }
-                sx={{ textAlign: "right", flex: 1, whiteSpace: "nowrap" }}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <QuizListWithEdit
+          quizList={quizList}
+          onQuizClick={handleQuizClick}
+          onEditQuiz={handleEditClick}
+        />
       ) : (
         <Typography textAlign="right">אין חידונים זמינים.</Typography>
       )}
 
-      {/* ✅ Quiz Details Dialog */}
       <QuizDetailsDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
+        open={detailsDialogOpen}
+        onClose={() => setDetailsDialogOpen(false)}
         quiz={selectedQuiz}
-      >
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleEditClick}
-          sx={{ mt: 2 }}
-        >
-          ערוך חידון
-        </Button>
-      </QuizDetailsDialog>
+      />
 
-      {/* ✅ Edit Quiz Dialog */}
-      {selectedQuiz && (
-        <EditQuizForm
-          open={editDialogOpen}
-          onClose={() => setEditDialogOpen(false)}
-          quiz={selectedQuiz}
-          onSave={handleSaveQuiz}
-        />
-      )}
+      <EditQuizForm
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        quiz={selectedQuiz}
+      />
     </Box>
   );
 };

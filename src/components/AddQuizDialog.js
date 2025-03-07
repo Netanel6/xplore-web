@@ -20,6 +20,8 @@ import {
 import { Delete } from "@mui/icons-material";
 import { useQuizContext } from "../context/quizContext";
 import QuestionForm from "./QuestionForm";
+import { convertToMilliseconds } from "../utils/timeUtils";
+
 
 const AddQuizDialog = () => {
   const { addQuiz } = useQuizContext();
@@ -33,18 +35,6 @@ const AddQuizDialog = () => {
   const [questions, setQuestions] = useState([]);
   const [error, setError] = useState("");
 
-  const convertToMilliseconds = (value, unit) => {
-    switch (unit) {
-      case "hours":
-        return value * 60 * 60 * 1000;
-      case "minutes":
-        return value * 60 * 1000;
-      case "seconds":
-      default:
-        return value * 1000;
-    }
-  };
-
   const handleAddQuestion = (question) => {
     setQuestions([...questions, question]);
   };
@@ -54,7 +44,7 @@ const AddQuizDialog = () => {
   };
 
   const handleSaveQuiz = async () => {
-    if (!quizTitle || questions.length === 0) {
+    if (!quizTitle) {
       setError("נא למלא את כל השדות ולהוסיף לפחות שאלה אחת.");
       return;
     }
@@ -96,6 +86,49 @@ const AddQuizDialog = () => {
           margin="dense"
         />
 
+ {/* Quiz Timer */}
+ <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+          <TextField
+            label="זמן חידון"
+            type="number"
+            value={quizTimerValue}
+            onChange={(e) => setQuizTimerValue(parseInt(e.target.value, 10) || 0)}
+            sx={{ mr: 2, width: "100px" }}
+          />
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>יחידה</InputLabel>
+            <Select value={quizTimerUnit} onChange={(e) => setQuizTimerUnit(e.target.value)}>
+              <MenuItem value="seconds">שניות</MenuItem>
+              <MenuItem value="minutes">דקות</MenuItem>
+              <MenuItem value="hours">שעות</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Answer Lock Timer */}
+        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+          <TextField
+            label="זמן נעילת תשובה"
+            type="number"
+            value={answerLockValue}
+            onChange={(e) => setAnswerLockValue(parseInt(e.target.value, 10) || 0)}
+            sx={{ mr: 2, width: "100px" }}
+          />
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>יחידה</InputLabel>
+            <Select value={answerLockUnit} onChange={(e) => setAnswerLockUnit(e.target.value)}>
+              <MenuItem value="seconds">שניות</MenuItem>
+              <MenuItem value="minutes">דקות</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Is Active */}
+        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+          <Typography sx={{ mr: 2 }}>פעיל:</Typography>
+          <Switch checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
+        </Box>
+        
         <QuestionForm onAddQuestion={handleAddQuestion} />
 
         <Typography variant="h5" sx={{ mt: 3 }}>

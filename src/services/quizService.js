@@ -32,3 +32,18 @@ export const createQuiz = async (quiz) => {
     throw error;
   }
 };
+
+export const updateQuiz = async (quizId, updatedQuiz) => {
+  console.log(`📝 Updating quiz with ID ${quizId}:`, updatedQuiz);
+  try {
+    const response = await apiClient(`/quizzes/quiz/${quizId}`, {
+      method: "PUT",
+      body: JSON.stringify(updatedQuiz),
+    });
+    console.log("✅ Quiz successfully updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("❌ API UpdateQuiz Error:", error);
+    throw error;
+  }
+};
