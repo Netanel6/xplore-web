@@ -28,6 +28,7 @@ export const QuizProvider = ({ children }) => {
       console.error("Error creating quiz:", error);
     }
   };
+
   const editQuiz = useCallback(
     async (quizId, updatedQuizData) => {
       setIsLoading(true);

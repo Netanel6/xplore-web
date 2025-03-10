@@ -58,17 +58,17 @@ export const editUser = async (userId, updatedUser) => {
   }
 };
 
-export const assignQuizToUser = async (userId, quiz) => {
-  console.log(`📌 Assigning quiz to user ID: ${userId}`, quiz);
+export const assignQuizzesToUser = async (userId, quizzes) => {
+  console.log(`📝 Assigning quizzes to user with ID ${userId}:`, quizzes);
   try {
     const response = await apiClient(`/users/${userId}/quizzes`, {
       method: "PATCH",
-      body: JSON.stringify(quiz),
+      body: JSON.stringify(quizzes),
     });
-    console.log("✅ Quiz assigned successfully:", response.data);
+    console.log("✅ Quizzes successfully assigned:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error assigning quiz:", error);
+    console.error("❌ API AssignQuizzesToUser Error:", error);
     throw error;
   }
 };
