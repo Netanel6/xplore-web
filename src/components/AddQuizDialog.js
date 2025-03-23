@@ -49,6 +49,10 @@ const AddQuizDialog = () => {
       return;
     }
 
+    const scoreBoard = {
+      scores: [] 
+    };
+
     const quiz = {
       title: quizTitle,
       quizTimer: convertToMilliseconds(quizTimerValue, quizTimerUnit),
@@ -56,6 +60,8 @@ const AddQuizDialog = () => {
       isActive,
       questions,
       totalScore: 0,
+      currentScore: 0,
+      scoreBoard
     };
 
     try {
