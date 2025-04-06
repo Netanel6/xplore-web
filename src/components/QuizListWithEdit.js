@@ -43,9 +43,7 @@ const QuizListWithEdit = ({ quizList, onQuizClick }) => {
 
             <ListItemText
               primary={
-                quiz.title?.length > 15
-                  ? `${quiz.title.substring(0, 15)}...`
-                  : quiz.title
+                quiz.title
               }
               secondary={
                 quiz.description?.length > 20
@@ -55,11 +53,11 @@ const QuizListWithEdit = ({ quizList, onQuizClick }) => {
               sx={{ textAlign: "right", flex: 1, whiteSpace: "nowrap" }}
             />
 
-            <ListItemSecondaryAction>
+          
               <IconButton edge="end" onClick={() => handleEditClick(quiz._id)}>
                 <EditIcon />
               </IconButton>
-            </ListItemSecondaryAction>
+        
           </ListItem>
         ))}
       </List>

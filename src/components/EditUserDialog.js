@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+    Grid,
     Dialog,
     DialogActions,
     DialogContent,
@@ -8,7 +9,7 @@ import {
     Button,
 } from "@mui/material";
 import { editUser } from "../services/userService";
-
+import UserDetails from "../../src/components/UserDetails";
 const EditUserDialog = ({ open, onClose, user, fetchUserList }) => {
     // 🏗 State Management
     const [name, setName] = useState("");
@@ -80,6 +81,11 @@ const EditUserDialog = ({ open, onClose, user, fetchUserList }) => {
                     helperText={error.phoneNumber}
                 />
             </DialogContent>
+
+            <Grid item xs={4}>
+                <UserDetails user={user} fetchUserList={fetchUserList} />
+            </Grid>
+
             <DialogActions>
                 <Button onClick={onClose} color="secondary">ביטול</Button>
                 <Button onClick={handleSave} color="primary" variant="contained">שמור</Button>

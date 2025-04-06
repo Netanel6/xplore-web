@@ -2,12 +2,6 @@ import React, { useState } from "react";
 import {
   Box,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
-  Switch,
-  Button,
 } from "@mui/material";
 import { useQuizContext } from "../context/quizContext";
 import QuizDetailsDialog from "../components/QuizDetailsDialog";
@@ -22,17 +16,12 @@ const QuizList = () => {
 
   const handleQuizClick = (quiz) => {
     setSelectedQuiz(quiz);
-    setDetailsDialogOpen(true); // Open details dialog
+    setDetailsDialogOpen(true); 
   };
 
   const handleEditClick = (quiz) => {
     setSelectedQuiz(quiz);
     setEditDialogOpen(true);
-  };
-
-  const handleSaveQuiz = (updatedQuiz) => {
-    updateQuiz(updatedQuiz);
-    setEditDialogOpen(false);
   };
 
   if (isLoading) {

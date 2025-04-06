@@ -15,7 +15,7 @@ import {
   Chip,
   Card,
   CardContent,
-} from "@mui/material"; // Added Card and CardContent
+} from "@mui/material";
 import { formatTime } from "../utils/timeUtils";
 
 const QuizDetailsDialog = ({ open, onClose, quiz }) => {
@@ -45,7 +45,7 @@ const QuizDetailsDialog = ({ open, onClose, quiz }) => {
           <Chip
             label={quiz.isActive ? "פעיל" : "לא פעיל"}
             color={quiz.isActive ? "success" : "default"}
-            sx={{ justifySelf: 'flex-end' }} // Align to the right
+            sx={{ justifySelf: 'flex-end' }} 
           />
         </Box>
 
@@ -92,10 +92,10 @@ const QuizDetailsDialog = ({ open, onClose, quiz }) => {
                           {question.media && (
                             <Box sx={{ mt: 2 }}>
                               <Typography variant="body2" sx={labelStyle}>מדיה:</Typography>
-                                {question.media.startsWith("http") ? ( // Basic check if it's a URL
+                                {question.media.startsWith("http") ? (
                                   <img src={question.media} alt={`Media for question ${index + 1}`} style={{ maxWidth: '100%', maxHeight: '200px' }} />
                                 ) : (
-                                  <Typography variant="body2">{question.media}</Typography> // Display as text if not a URL
+                                  <Typography variant="body2">{question.media}</Typography>
                                 )}
                             </Box>
                           )}
