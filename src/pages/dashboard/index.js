@@ -4,7 +4,7 @@ import MainContainer from "../../mainContainer";
 import AddQuizDialog from "../../components/AddQuizDialog";
 import { useUserContext } from "../../context/userContext";
 import { useQuizContext } from "../../context/quizContext";
-import UserManagment from "@/components/UserManagement";
+import UserManagement from "@/components/UserManagement";
 import QuizManagement from "@/components/QuizManagement";
 
 const Dashboard = () => {
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
         {/* 2️⃣ User Management Section */}
         <Grid item xs={12} md={4}>
-          <UserManagment
+          <UserManagement
             fetchUserList={fetchUserList}
             userList={userList}
           />
