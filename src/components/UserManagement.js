@@ -6,7 +6,7 @@ import EditUserDialog from "./EditUserDialog";
 
 
 
-const UserManagment = ({ fetchUserList, userList }) => {
+const UserManagement = ({ fetchUserList, userList }) => {
 
     const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
@@ -66,4 +66,4 @@ const UserManagment = ({ fetchUserList, userList }) => {
     )
 };
 
-export default UserManagment;
+export default UserManagement;

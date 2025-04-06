@@ -9,7 +9,7 @@ import EditQuizForm from "../components/EditQuizForm";
 import QuizListWithEdit from "../components/QuizListWithEdit";
 
 const QuizList = () => {
-  const { quizList, isLoading, updateQuiz } = useQuizContext();
+  const { quizList, isLoading } = useQuizContext();
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);

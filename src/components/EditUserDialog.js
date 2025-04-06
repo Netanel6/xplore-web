@@ -9,7 +9,7 @@ import {
     Button,
 } from "@mui/material";
 import { editUser } from "../services/userService";
-import UserDetails from "../../src/components/UserDetails";
+import UserDetails from "./UserDetails";
 const EditUserDialog = ({ open, onClose, user, fetchUserList }) => {
     // 🏗 State Management
     const [name, setName] = useState("");
