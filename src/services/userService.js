@@ -3,7 +3,7 @@ import apiClient from "../utils/apiClient";
 export const fetchUsers = async () => {
   console.log("🔍 Fetching users from API: /users/all");
   try {
-    const response = await apiClient("/users/all"); // ✅ Ensure this returns data
+    const response = await apiClient("/users/all"); 
     console.log("✅ API Response:", response);
     
     if (!response || !response.data) {

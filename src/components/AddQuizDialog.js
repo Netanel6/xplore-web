@@ -16,6 +16,7 @@ import {
   ListItemText,
   IconButton,
   Alert,
+  Divider
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useQuizContext } from "../context/quizContext";
@@ -50,7 +51,7 @@ const AddQuizDialog = () => {
     }
 
     const scoreBoard = {
-      scores: [] 
+      scores: []
     };
 
     const quiz = {
@@ -76,11 +77,12 @@ const AddQuizDialog = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, dir: "rtl" }}>
+    <Container maxWidth="md" sx={{dir: "rtl" }}>
       <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" sx={{ textAlign: "center", mb: 2 }}>
+        <Typography variant="h5" component="h2">
           הוספת חידון חדש
         </Typography>
+        <Divider />
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
@@ -92,8 +94,8 @@ const AddQuizDialog = () => {
           margin="dense"
         />
 
- {/* Quiz Timer */}
- <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+        {/* Quiz Timer */}
+        <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <TextField
             label="זמן חידון"
             type="number"
@@ -114,7 +116,7 @@ const AddQuizDialog = () => {
         {/* Answer Lock Timer */}
         <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
           <TextField
-            label="זמן נעילת תשובה"
+            label="נעילת תשובה"
             type="number"
             value={answerLockValue}
             onChange={(e) => setAnswerLockValue(parseInt(e.target.value, 10) || 0)}
@@ -134,7 +136,7 @@ const AddQuizDialog = () => {
           <Typography sx={{ mr: 2 }}>פעיל:</Typography>
           <Switch checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
         </Box>
-        
+
         <QuestionForm onAddQuestion={handleAddQuestion} />
 
         <Typography variant="h5" sx={{ mt: 3 }}>

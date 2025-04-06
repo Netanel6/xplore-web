@@ -59,8 +59,8 @@ const UserDetails = ({ user }) => {
   }
 
   return (
-    <Paper elevation={3} sx={{ p: 3, bgcolor: "#fff", dir: "rtl", textAlign: "right" }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>
+    <Paper elevation={3} sx={{ p: 2, bgcolor: "#fff", dir: "rtl", textAlign: "right" }}>
+      <Typography variant="h5" sx={{ mb: 4 }}>
         פרטי משתמש
       </Typography>
       <Typography variant="body1">
@@ -69,37 +69,7 @@ const UserDetails = ({ user }) => {
       <Typography variant="body1">
         <strong>מס׳ טלפון:</strong> {user.phone_number}
       </Typography>
-      <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        שאלונים משויכים
-      </Typography>
-
-      {assignedQuizzes.length > 0 ? (
-        <List>
-          {assignedQuizzes.map((quiz) => (
-            <ListItem
-              key={quiz._id}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between", // ✅ Align text right, icon left
-                flexDirection: "row-reverse", // ✅ Ensures correct RTL order
-              }}
-            >
-              {/* ✅ Quiz Title */}
-              <ListItemText primary={quiz.title} sx={{ textAlign: "right" }} />
-              
-              {/* ❌ Delete Icon (Aligned Left) */}
-              <IconButton edge="start" color="error" onClick={() => handleDeleteQuiz(quiz._id)}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-      ) : (
-        <Typography color="textSecondary">אין שאלונים משויכים למשתמש זה.</Typography>
-      )}
-
-      {/* ➕ Add Quiz Button */}
+      <Divider sx={{ mt: 2 }} />
       <Button
         variant="contained"
         color="primary"
@@ -107,8 +77,43 @@ const UserDetails = ({ user }) => {
         sx={{ mt: 3 }}
         onClick={() => setAssignQuizDialogOpen(true)}
       >
-        הוסף חידון
+        הוסף חידון למשתמש
       </Button>
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="h6" sx={{ mb: 1.5 }}>
+        שאלונים משויכים
+      </Typography>
+
+      {assignedQuizzes.length > 0 ? (
+        <List>
+          {assignedQuizzes.map((quiz) => (
+            <Box>
+              <Divider/>
+              <Box>
+                <ListItem
+                  key={quiz._id}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    flexDirection: "row-reverse",
+                  }}
+                >
+
+                  <IconButton edge="start" color="error" onClick={() => handleDeleteQuiz(quiz._id)}>
+                    <DeleteIcon />
+                  </IconButton>
+
+                  <ListItemText primary={quiz.title} sx={{ textAlign: "right" }} />
+                </ListItem>
+              </Box>
+            </Box>
+
+
+          ))}
+        </List>
+      ) : (
+        <Typography color="textSecondary">אין שאלונים משויכים למשתמש זה.</Typography>
+      )}
 
       {/* 📜 Assign Quiz Dialog */}
       <AssignQuizDialog open={assignQuizDialogOpen} onClose={() => setAssignQuizDialogOpen(false)} selectedUser={user} />
